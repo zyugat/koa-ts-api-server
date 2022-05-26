@@ -1,4 +1,4 @@
-let db = require('src/db/study')
+let db = require('../../db/study')
 
 export default class dangdangService {
   base = () => {

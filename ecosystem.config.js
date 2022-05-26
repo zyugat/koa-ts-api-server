@@ -7,11 +7,12 @@ module.exports = {
       name,
       script: path.resolve(__dirname, './dist/index.js'),
       instances: require('os').cpus().length,
+      // instances: 1,
       autorestart: true,
       watch: true,
       env_production: {
         NODE_ENV: 'production',
-        PORT: 6300,
+        PORT: 4000,
       },
     },
   ],

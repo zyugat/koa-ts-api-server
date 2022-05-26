@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
-import { createToken, verifyToken } from 'src/jwt'
-import { createOrderNum } from 'src/hooks/base'
-let db = require('src/db/study')
+import { createToken, verifyToken } from '../../jwt'
+import { createOrderNum } from '../../hooks/base'
+let db = require('../../db/study')
 
 interface Ires {
   uid: string
