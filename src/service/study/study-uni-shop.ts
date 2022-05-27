@@ -245,19 +245,19 @@ export default class uniShopService {
   }
 
   /** 修改购物车商品数量 */
-  updateCart = (token: string, pid: string, count: string) => {
+  updateCart = (token: string, cid: string, count: string) => {
     return new Promise(resolve => {
       if (token === undefined) {
         resolve({ data: '请传入 token', status: false, code: 400 })
-      } else if (pid === undefined) {
-        resolve({ data: '请传入商品ID', status: false, code: 400 })
+      } else if (cid === undefined) {
+        resolve({ data: '请传入购物车ID', status: false, code: 400 })
       } else if (count === undefined) {
         resolve({ data: '请传入count', status: false, code: 400 })
       } else {
         verifyToken(token).then(
           res => {
             let { uid } = res as Ires
-            let sql = `update unishopcart set count=${count} where pid=${pid} AND uid="${uid}";`
+            let sql = `update unishopcart set count=${count} where cid=${cid} AND uid="${uid}";`
             db.query(sql).then(
               _res => {
                 if (_res.changedRows === 0) {
@@ -298,22 +298,22 @@ export default class uniShopService {
   }
 
   /** 删除购物车 */
-  delCart = (token: string, pid: string) => {
+  delCart = (token: string, cid: string) => {
     return new Promise(resolve => {
       if (token === undefined) {
         resolve({ data: '请传入 token', status: false, code: 400 })
-      } else if (pid === undefined) {
+      } else if (cid === undefined) {
         resolve({ data: '请传入商品ID', status: false, code: 400 })
       } else {
         verifyToken(token).then(
           res => {
             let { uid } = res as Ires
-            let sql = `delete from unishopcart where pid=${pid} AND uid="${uid}";`
+            let sql = `delete from unishopcart where cid=${cid} AND uid="${uid}";`
             db.query(sql).then(
               _res => {
                 if (_res.affectedRows === 0) {
                   resolve({
-                    msg: '失败,找不到与uid与pid相匹配的数据',
+                    msg: '失败,找不到与uid与cid相匹配的数据',
                     status: false,
                     code: 400,
                   })

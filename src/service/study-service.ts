@@ -85,15 +85,15 @@ export default class StudyService {
 
   uniShopUpdateCart = ctx => {
     return new Promise(resolve => {
-      let { token, pid, count } = ctx.request.body || undefined
-      resolve(this.uniShopService.updateCart(token, pid, count))
+      let { token, cid, count } = ctx.request.body || undefined
+      resolve(this.uniShopService.updateCart(token, cid, count))
     })
   }
 
   uniShopDelCart = ctx => {
     return new Promise(resolve => {
-      let { token, pid } = ctx.request.body || undefined
-      resolve(this.uniShopService.delCart(token, pid))
+      let { token, cid } = ctx.request.body || undefined
+      resolve(this.uniShopService.delCart(token, cid))
     })
   }
 
