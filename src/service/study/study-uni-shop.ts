@@ -448,7 +448,7 @@ export default class uniShopService {
 
             let id = createOrderNum()
             let _plist = plist.match(/(\d-\d)/g).toString()
-            let sql = `insert into unishoporder(id,uid,plist,address,phone,time,status,tracking,finish) VALUES("${id}","${uid}","${_plist}","${address}","${phone}","${time}","已下订单","无",0) `
+            let sql = `insert into unishoporder(oid,uid,plist,address,phone,time,status,tracking,finish) VALUES("${id}","${uid}","${_plist}","${address}","${phone}","${time}","已下订单","无",0) `
 
             db.query(sql).then(
               _res => {
