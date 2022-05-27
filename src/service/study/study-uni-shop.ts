@@ -4,6 +4,7 @@ import { createOrderNum } from '../../hooks/base'
 let db = require('../../db/study')
 
 interface Ires {
+  msg: string
   uid: string
   name: string
   psw: string
@@ -22,16 +23,15 @@ export default class uniShopService {
           res => {
             resolve({
               data: res as Ires,
+              msg: '成功',
               status: true,
               code: 200,
             })
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })
@@ -39,13 +39,13 @@ export default class uniShopService {
         )
       } else if (!name && !email) {
         resolve({
-          data: '请传递 name 或 email',
+          msg: '请传递 name 或 email',
           status: false,
           code: 400,
         })
       } else if (!psw) {
         resolve({
-          data: '请传递 psw',
+          msg: '请传递 psw',
           status: false,
           code: 400,
         })
@@ -59,23 +59,21 @@ export default class uniShopService {
             /** 错误检测 */
             if (_res.length === 0) {
               resolve({
-                data: '用户名或邮箱不正确',
+                msg: '用户名或邮箱不正确',
                 status: false,
                 code: 400,
               })
             } else if (_res[0].psw !== psw) {
               resolve({
-                data: '密码不正确',
+                msg: '密码不正确',
                 status: false,
                 code: 400,
               })
             } else {
               let token = createToken(_res[0])
               resolve({
-                data: {
-                  msg: '登录成功',
-                  token,
-                },
+                data: token,
+                msg: '登录成功',
                 status: true,
                 code: 200,
               })
@@ -84,6 +82,7 @@ export default class uniShopService {
           err => {
             resolve({
               data: err,
+              msg: '失败',
               status: false,
               code: 400,
             })
@@ -99,19 +98,19 @@ export default class uniShopService {
       /** 判断传值是否正常 */
       if (!name) {
         resolve({
-          data: '请传递 name',
+          msg: '请传递 name',
           status: false,
           code: 400,
         })
       } else if (!email) {
         resolve({
-          data: '请传递 email',
+          msg: '请传递 email',
           status: false,
           code: 400,
         })
       } else if (!psw) {
         resolve({
-          data: '请传递 psw',
+          msg: '请传递 psw',
           status: false,
           code: 400,
         })
@@ -124,13 +123,13 @@ export default class uniShopService {
 
             if (_res.affectedRows === 0) {
               resolve({
-                data: '已存在该用户,无法注册成功',
+                msg: '已存在该用户,无法注册成功',
                 status: false,
                 code: 400,
               })
             } else {
               resolve({
-                data: '注册成功',
+                msg: '注册成功',
                 status: true,
                 code: 200,
               })
@@ -139,6 +138,7 @@ export default class uniShopService {
           err => {
             resolve({
               data: err,
+              msg: '失败',
               status: false,
               code: 400,
             })
@@ -163,6 +163,7 @@ export default class uniShopService {
               _res => {
                 resolve({
                   data: _res,
+                  msg: '成功',
                   status: true,
                   code: 200,
                 })
@@ -170,6 +171,7 @@ export default class uniShopService {
               err => {
                 resolve({
                   data: err,
+                  msg: '失败',
                   status: false,
                   code: 400,
                 })
@@ -178,10 +180,8 @@ export default class uniShopService {
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })
@@ -209,13 +209,13 @@ export default class uniShopService {
               _res => {
                 if (_res.affectedRows === 0) {
                   resolve({
-                    data: '失败,存在重复项',
+                    msg: '失败,存在重复项',
                     status: false,
                     code: 400,
                   })
                 } else {
                   resolve({
-                    data: '添加成功',
+                    msg: '添加成功',
                     status: true,
                     code: 200,
                   })
@@ -224,6 +224,7 @@ export default class uniShopService {
               err => {
                 resolve({
                   data: err,
+                  msg: '失败',
                   status: false,
                   code: 400,
                 })
@@ -232,10 +233,8 @@ export default class uniShopService {
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })
@@ -263,13 +262,13 @@ export default class uniShopService {
               _res => {
                 if (_res.changedRows === 0) {
                   resolve({
-                    data: '失败,找不到与uid与pid相匹配的数据',
+                    msg: '失败,找不到与用户与产品相匹配的数据',
                     status: false,
                     code: 400,
                   })
                 } else {
                   resolve({
-                    data: '修改成功',
+                    msg: '修改成功',
                     status: true,
                     code: 200,
                   })
@@ -278,6 +277,7 @@ export default class uniShopService {
               err => {
                 resolve({
                   data: err,
+                  msg: '失败',
                   status: false,
                   code: 400,
                 })
@@ -286,10 +286,8 @@ export default class uniShopService {
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })
@@ -315,13 +313,13 @@ export default class uniShopService {
               _res => {
                 if (_res.affectedRows === 0) {
                   resolve({
-                    data: '失败,找不到与uid与pid相匹配的数据',
+                    msg: '失败,找不到与uid与pid相匹配的数据',
                     status: false,
                     code: 400,
                   })
                 } else {
                   resolve({
-                    data: '删除成功',
+                    msg: '删除成功',
                     status: true,
                     code: 200,
                   })
@@ -330,6 +328,7 @@ export default class uniShopService {
               err => {
                 resolve({
                   data: err,
+                  msg: '失败',
                   status: false,
                   code: 400,
                 })
@@ -338,10 +337,8 @@ export default class uniShopService {
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })
@@ -369,6 +366,7 @@ export default class uniShopService {
                 err => {
                   resolve({
                     data: err,
+                    msg: '失败',
                     status: false,
                     code: 400,
                   })
@@ -405,6 +403,7 @@ export default class uniShopService {
                   .then(_res => {
                     resolve({
                       data: _res,
+                      msg: '成功',
                       status: false,
                       code: 400,
                     })
@@ -413,10 +412,8 @@ export default class uniShopService {
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })
@@ -457,13 +454,13 @@ export default class uniShopService {
               _res => {
                 if (_res.affectedRows === 0) {
                   resolve({
-                    data: '失败',
+                    msg: '失败',
                     status: false,
                     code: 400,
                   })
                 } else {
                   resolve({
-                    data: '添加成功',
+                    msg: '添加成功',
                     status: true,
                     code: 200,
                   })
@@ -472,6 +469,7 @@ export default class uniShopService {
               err => {
                 resolve({
                   data: err,
+                  msg: '失败',
                   status: false,
                   code: 400,
                 })
@@ -480,10 +478,8 @@ export default class uniShopService {
           },
           err => {
             resolve({
-              data: {
-                msg: '请传入正确的token',
-                err,
-              },
+              data: err,
+              msg: '请传入正确的token',
               status: false,
               code: 400,
             })

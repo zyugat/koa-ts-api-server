@@ -53,18 +53,24 @@ export default class dangdangService {
           let _res = JSON.parse(JSON.stringify(res))
 
           if (res.length === 0) {
-            _res = '请正确传值'
+            resolve({
+              msg: '请正确传值',
+              status: true,
+              code: 200,
+            })
+          } else {
+            resolve({
+              data: _res,
+              msg: '成功',
+              status: true,
+              code: 200,
+            })
           }
-
-          resolve({
-            data: _res,
-            status: true,
-            code: 200,
-          })
         },
         (err: any) => {
           resolve({
             data: err,
+            msg: '失败',
             status: false,
             code: 400,
           })
@@ -82,15 +88,15 @@ export default class dangdangService {
           let _res = JSON.parse(JSON.stringify(res))
 
           if (res.length === 0) {
-            _res = '请正确传值'
             resolve({
-              data: _res,
-              status: false,
-              code: 400,
+              msg: '请正确传值',
+              status: true,
+              code: 200,
             })
           } else {
             resolve({
               data: _res,
+              msg: '成功',
               status: true,
               code: 200,
             })
