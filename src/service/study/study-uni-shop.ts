@@ -203,7 +203,7 @@ export default class uniShopService {
           res => {
             let { uid } = res as Ires
 
-            let sql = `insert into unishopcart(uid,pid,count) SELECT "${uid}", "${pid}",1 FROM dual WHERE NOT EXISTS (SELECT id FROM unishopcart WHERE uid="${uid}" AND pid=${pid});`
+            let sql = `insert into unishopcart(uid,pid,count) SELECT "${uid}", "${pid}",1 FROM dual WHERE NOT EXISTS (SELECT uid FROM unishopcart WHERE uid="${uid}" AND pid=${pid});`
 
             db.query(sql).then(
               _res => {
