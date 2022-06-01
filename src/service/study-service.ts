@@ -106,8 +106,11 @@ export default class StudyService {
 
   uniShopAddOrder = ctx => {
     return new Promise(resolve => {
-      let { token, plist, phone, address, time } = ctx.request.body || undefined
-      resolve(this.uniShopService.addOrder(token, plist, phone, address, time))
+      let { token, plist, phone, address, time, total } =
+        ctx.request.body || undefined
+      resolve(
+        this.uniShopService.addOrder(token, plist, phone, address, time, total),
+      )
     })
   }
   //#endregion

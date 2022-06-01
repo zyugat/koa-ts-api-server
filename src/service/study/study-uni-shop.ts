@@ -452,6 +452,7 @@ export default class uniShopService {
     phone: string,
     address: string,
     time: string,
+    total: string,
   ) => {
     return new Promise(resolve => {
       if (token === undefined) {
@@ -464,6 +465,8 @@ export default class uniShopService {
         resolve({ data: '请传入手机号', status: false, code: 400 })
       } else if (time === undefined) {
         resolve({ data: '请传入time', status: false, code: 400 })
+      } else if (total === undefined) {
+        resolve({ data: '请传入total', status: false, code: 400 })
       } else {
         verifyToken(token).then(
           res => {
@@ -471,7 +474,7 @@ export default class uniShopService {
 
             let id = createOrderNum()
             let _plist = plist.match(/(\d-\d)/g).toString()
-            let sql = `insert into unishoporder(oid,uid,plist,address,phone,time,status,tracking,finish) VALUES("${id}","${uid}","${_plist}","${address}","${phone}","${time}","已下订单","无",0) `
+            let sql = `insert into unishoporder(oid,uid,plist,address,phone,time,status,tracking,finish,total) VALUES("${id}","${uid}","${_plist}","${address}","${phone}","${time}","已下订单","无",0,${total}) `
 
             db.query(sql).then(
               _res => {
