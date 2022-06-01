@@ -449,8 +449,8 @@ export default class uniShopService {
   addOrder = (
     token: string,
     plist: string,
-    address: string,
     phone: string,
+    address: string,
     time: string,
   ) => {
     return new Promise(resolve => {
