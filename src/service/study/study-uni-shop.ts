@@ -13,6 +13,52 @@ interface Ires {
   exp: number
 }
 
+interface IOrder {
+  oid: string
+  uid: string
+  plist: string
+  address: string
+  phone: string
+  time: string
+  status: string
+  tracking: string
+  finish: number
+}
+
+/** 在订单数据中添加商品数据 */
+function orderPList(item: IOrder) {
+  return new Promise((resolve, reject) => {
+    let plist = item.plist
+    /** 保存进行格式化后的plist */
+    // [ [ 2, 1 ], [ 5, 2 ] ]
+    let _plist = []
+    /** 整理 plist */
+    for (let index in plist.match(/(\d+-\d+)/g)) {
+      // 匹配元素,[ '2-1', '5-2' ]
+      let item = plist.match(/(\d+-\d+)/g)[index]
+      // 拆分元素并转为数字类型,id + count 格式,[ 2, 1 ]
+      let id = Number(item.split('-')[0])
+      let count = Number(item.split('-')[1])
+      _plist.push([id, count])
+    }
+
+    // 转为字符串方便mysql查询
+    let idList = _plist.map(item => item[0]).toString()
+
+    db.query(`SELECT * from dangdang where id in (${idList})`).then(res => {
+      let a = 0
+      let result: [[], {}] = [[], {}]
+      result[0] = res.map(item => {
+        item['count'] = _plist[a][1]
+        a++
+        return item
+      })
+      result[1] = item
+      resolve(result)
+    })
+  })
+}
+
 export default class uniShopService {
   /** 登录 */
   login = (name: string, email: string, psw: string, token: string) => {
@@ -348,6 +394,7 @@ export default class uniShopService {
     })
   }
 
+  /** 显示所有订单 */
   showOrder = (token: string) => {
     return new Promise(resolve => {
       /** 判断是否存在 token,并且传值是否正常 */
@@ -358,57 +405,32 @@ export default class uniShopService {
           res => {
             let { uid } = res as Ires
             let sql = `select * from unishoporder where uid="${uid}"`
-            db.query(sql)
-              .then(
-                _res => {
-                  return _res[0].plist
-                },
-                err => {
+            db.query(sql).then(
+              _res => {
+                let index = 0
+                let result: [] = []
+                result = _res.map(item => {
+                  if (index != 0) index++
+                  return orderPList(_res[index])
+                })
+                Promise.all(result).then(order => {
                   resolve({
-                    data: err,
-                    msg: '失败',
-                    status: false,
-                    code: 400,
+                    data: order,
+                    msg: '成功',
+                    status: true,
+                    code: 200,
                   })
-                },
-              )
-              .then(_res => {
-                let _plist = []
-                /** 整理 plist */
-                for (let index in _res.match(/(\d-\d)/g)) {
-                  // 匹配元素,[ '2-1', '5-2' ]
-                  let item = _res.match(/(\d-\d)/g)[index]
-                  // 拆分元素并转为数字类型,id + count 格式,[ 2, 1 ]
-                  let id = Number(item.split('-')[0])
-                  let count = Number(item.split('-')[1])
-                  _plist.push([id, count])
-                }
-                // [ [ 2, 1 ], [ 5, 2 ] ]
-                // console.log(_plist)
-
-                // 转为字符串方便mysql查询
-                let idList = _plist.map(item => item[0]).toString()
-
-                db.query(`SELECT * from dangdang where id in (${idList})`)
-                  .then(res => {
-                    let a = 0
-                    res = res.map(item => {
-                      item['count'] = _plist[a][1]
-                      a++
-                      return item
-                    })
-
-                    return res
-                  })
-                  .then(_res => {
-                    resolve({
-                      data: _res,
-                      msg: '成功',
-                      status: false,
-                      code: 400,
-                    })
-                  })
-              })
+                })
+              },
+              err => {
+                resolve({
+                  data: err,
+                  msg: '失败',
+                  status: false,
+                  code: 400,
+                })
+              },
+            )
           },
           err => {
             resolve({

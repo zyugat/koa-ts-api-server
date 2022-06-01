@@ -1,3 +1,4 @@
+/** 生成订单编号 */
 function createOrderNum() {
   let setTimeDateFmt = s => {
     return s < 10 ? '0' + s : s
