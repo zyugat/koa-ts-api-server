@@ -410,8 +410,9 @@ export default class uniShopService {
                 let index = 0
                 let result: [] = []
                 result = _res.map(item => {
-                  if (index != 0) index++
-                  return orderPList(_res[index])
+                  let orderItem = orderPList(_res[index])
+                  index++
+                  return orderItem
                 })
                 Promise.all(result).then(order => {
                   resolve({
